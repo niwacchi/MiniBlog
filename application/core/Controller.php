@@ -40,8 +40,9 @@ abstract class Controller
 
     protected function needsAuthentication($action)
     {
-        if($this->auth_actions === true)
-          || (is_array($this->auth_actions) && in_array($action,$this->auth_actions))
+        if($this->auth_actions === true
+          || (is_array($this->auth_actions)
+                && in_array($action,$this->auth_actions)))
         {
             return true;          
         }
@@ -92,11 +93,11 @@ abstract class Controller
     {
         $key = 'csrf_tokens/' . $form_name;
         $tokens = $this->session->get($key,array());
-        if(coutn($tokens) >= 10){
+        if(count($tokens) >= 10){
             array_shift($tokens);
         }
         
-        $token = sha1($form_name . sessioin_id() . microtime());
+        $token = sha1($form_name . session_id() . microtime());
         $tokens[] = $token;
         
         $this->session->set($key, $tokens);

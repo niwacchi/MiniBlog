@@ -17,7 +17,7 @@ abstract class Application
     
     protected function setDebugMode($debug)
     {
-        id($debug){
+        if($debug){
             $this->debug = true;
             ini_set('display_errors',1);
             error_reporting(-1);
@@ -33,7 +33,7 @@ abstract class Application
         $this->response = new Response();
         $this->session = new Session();
         $this->db_manager = new DbManager();
-        $this->router = new Router($this->regsterRoutes());
+        $this->router = new Router($this->registerRoutes());
     }
     
     protected function configure()
@@ -54,6 +54,11 @@ abstract class Application
         return $this->request;
     }
 
+    public function getResponse()
+    {
+        return $this->response;
+    }
+    
     public function getSession()
     {
         return $this->session;
@@ -88,7 +93,7 @@ abstract class Application
     {
         try{
             $params = $this->router->resolve($this->request->getPathInfo());
-            if($param === false){
+            if($params === false){
                 throw new HttpNotFoundException('No route found for ' . $this->request->getPathInfo());
             }
     
@@ -106,11 +111,11 @@ abstract class Application
         $this->response->send();
     }
     
-    public function runAction($controller_name.,$action,$params = array())
+    public function runAction($controller_name,$action,$params = array())
     {
         $controller_class = ucfirst($controller_name) . 'Controller';
         
-        $controller = $this->fundController($controller_class);
+        $controller = $this->findController($controller_class);
         if($controller === false){
             throw new HttpNotFoundException($controller_class . ' controller is not found.');
         }
@@ -139,7 +144,7 @@ abstract class Application
     protected function render404Page($e)
     {
         $this->response->setStatusCode(404,'Not Found');
-        $message = $this->isDebugMode() ? $->getMessage() : 'Page not found.';
+        $message = $this->isDebugMode() ? $e->getMessage() : 'Page not found.';
         $message = htmlspecialchars($message,ENT_QUOTES,'UTF-8');
         
         $this->response->setContent(<<<EOF

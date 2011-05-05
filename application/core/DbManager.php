@@ -28,7 +28,7 @@ class DbManager
     public function getConnection($name = null)
     {
         if(is_null($name)){
-            return current($this->connection);
+            return current($this->connections);
         }
         
         return $this->connections[$name];

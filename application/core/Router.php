@@ -8,7 +8,7 @@ class Router
         $this->routes = $this->compileRoutes($definitions);
     }
     
-    public function compileRoutes($definition)
+    public function compileRoutes($definitions)
     {
         $routes = array();
         
@@ -17,7 +17,7 @@ class Router
             foreach($tokens as $i => $token) {
                 if(0 === strpos($token,':')){
                     $name = substr($token,1);
-                    $token = '(?P<' . $name . '>[^/]+';
+                    $token = '(?P<' . $name . '>[^/]+)';
                 }
                 $tokens[$i] = $token;
             }

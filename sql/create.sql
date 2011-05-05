@@ -9,7 +9,7 @@ create table user (
 
 create table following(
   user_id integer,
-  folowing_id integer,
+  following_id integer,
   primary key(user_id, following_id)
 ) engine = innodb;
 
@@ -17,12 +17,12 @@ create table status(
   id integer auto_increment,
   user_id integer not null,
   body varchar(255),
-  created_dt datetime,
+  created_at datetime,
   primary key(id),
-  index user_id_index(usr_id)
+  index user_id_index(user_id)
 ) engine = innodb;
 
-alter table following as foreign key(user_id) references user(id);
-alter table following as foreign key(following_id) references user(id);
-alter table status as foreign key(user_id) references user(id);
+alter table following add foreign key(user_id) references user(id);
+alter table following add foreign key(following_id) references user(id);
+alter table status add foreign key(user_id) references user(id);
 
